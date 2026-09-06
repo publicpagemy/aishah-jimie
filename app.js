@@ -61,44 +61,38 @@ function go(id, { scroll = true } = {}) {
     if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
     if (id === 'ucapan') ensureWishes();
     switching = false;
-  }, 420);
+  }, 600);
 }
 tabs.forEach(b => b.addEventListener('click', () => go(b.dataset.page)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); if (a.id === 'quickCal') $('#gcal').click(); else go(a.dataset.go); }));
 
-// ═══════════════ FOOTSTEPS (Marauder's Map) ═══════════════
-const stepsSvg = $('#footsteps svg');
-const FOOT = 'M0-9c-3.2 0-5 2.6-5 6.2 0 2.4.9 3.9 1.4 5.3H3.6C4.1 1.1 5-.4 5-2.8 5-6.4 3.2-9 0-9zM-3.2 4.2c-.6 1.7-.6 3.2.4 4.3.9 1 2 1 2.8 1s1.9 0 2.8-1c1-1.1 1-2.6.4-4.3z';
+// ═══════════════ FOOTSTEPS (Marauder's Map) — plain HTML elements, CSS opacity only ═══════════════
+const stepsEl = $('#footsteps');
 function walk() {
-  stepsSvg.innerHTML = '';
-  const W = Math.min(window.innerWidth, 430), H = window.innerHeight;
-  stepsSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  stepsSvg.setAttribute('preserveAspectRatio', 'none');
+  stepsEl.innerHTML = '';
+  const W = stepsEl.clientWidth || Math.min(window.innerWidth, 430), H = stepsEl.clientHeight || window.innerHeight;
   const dir = Math.random() < .5 ? 1 : -1;
   const x0 = dir > 0 ? 40 + Math.random() * 60 : W - 40 - Math.random() * 60;
-  const y0 = H * (.82 + Math.random() * .08);
+  const y0 = H * (.84 + Math.random() * .06);
   const x1 = dir > 0 ? W - 60 - Math.random() * 80 : 60 + Math.random() * 80;
   const y1 = H * (.10 + Math.random() * .12);
   const cx = W / 2 + (Math.random() - .5) * W * .8, cy = (y0 + y1) / 2 + (Math.random() - .5) * 200;
-  const n = 12, sc = 1.45;
+  const n = 12;
   for (let i = 0; i <= n; i++) {
     const t = i / n, u = 1 - t;
     const x = u * u * x0 + 2 * u * t * cx + t * t * x1;
     const y = u * u * y0 + 2 * u * t * cy + t * t * y1;
     const dx = 2 * u * (cx - x0) + 2 * t * (x1 - cx), dy = 2 * u * (cy - y0) + 2 * t * (y1 - cy);
     const ang = Math.atan2(dy, dx) * 180 / Math.PI + 90;
-    const side = i % 2 ? 9 : -9;
+    const side = i % 2 ? 10 : -10;
     const nx = -dy, ny = dx, len = Math.hypot(nx, ny) || 1;
     const px = x + nx / len * side, py = y + ny / len * side;
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('transform', `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(${i % 2 ? -sc : sc} ${sc})`);
-    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    p.setAttribute('d', FOOT); p.setAttribute('class', 'step');
-    p.style.animationDelay = `${i * 95}ms`;
-    g.appendChild(p); stepsSvg.appendChild(g);
+    const d = document.createElement('div');
+    d.className = 'fp';
+    d.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) rotate(${ang.toFixed(1)}deg) scaleX(${i % 2 ? -1 : 1})`;
+    d.style.animationDelay = `${i * 75}ms`;
+    stepsEl.appendChild(d);
   }
-  void stepsSvg.getBoundingClientRect();           // force layout so the opacity animation starts from 0 on every engine
-  stepsSvg.querySelectorAll('.step').forEach(p => p.classList.add('on'));
 }
 
 // ═══════════════ COUNTDOWN + CALENDAR ═══════════════

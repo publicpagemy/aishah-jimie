@@ -17,7 +17,7 @@ Replace `assets/bgm.mp3`.
 
 ## Read RSVP / Ucapan (guest submissions)
 1. Go to **https://publicpagemy.github.io/aishah-jimie/admin.html**
-2. Tap **Log masuk dengan Google** → choose **ainrazakk@gmail.com** (the only accounts allowed are ainrazakk@gmail.com and ain@pandai.org — anyone else gets "permission denied").
+2. Tap **Log masuk dengan Google** → choose **ainrazakk@gmail.com** (allowed: ainrazakk@gmail.com, aishahrzak53@gmail.com, aishahrazakk@gmail.com — anyone else gets "permission denied").
 3. Top tiles: Hadir (responses), Jumlah pax, Tidak hadir, Ucapan.
 4. **RSVP** tab: name, phone (tap = WhatsApp), hadir/tidak, pax, time. **Ucapan** tab: wishes.
 5. Search box filters by name/phone/text. **Download CSV** exports the current tab (opens in Excel/Numbers). **Padam** deletes a row (asks to confirm).

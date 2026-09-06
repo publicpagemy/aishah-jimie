@@ -119,11 +119,7 @@ const e = CONFIG.event;
 $('#gcal').href = 'https://calendar.google.com/calendar/render?' + new URLSearchParams({
   action: 'TEMPLATE', text: e.title, dates: `${fmtUTC(e.start)}/${fmtUTC(e.end)}`, details: e.details, location: e.venue,
 });
-const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//aishah-jimie//invite//MS', 'BEGIN:VEVENT',
-  `UID:aishah-jimie-${fmtUTC(e.start)}@invite`, `DTSTAMP:${fmtUTC(new Date().toISOString())}`,
-  `DTSTART:${fmtUTC(e.start)}`, `DTEND:${fmtUTC(e.end)}`, `SUMMARY:${e.title}`,
-  `DESCRIPTION:${e.details.replace(/,/g, '\\,')}`, `LOCATION:${e.venue.replace(/,/g, '\\,')}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
-$('#ical').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+// Apple/other calendars: hosted assets/event.ics (data: URLs are unreliable on iOS Safari)
 
 // ═══════════════ STATIC RENDERS ═══════════════
 $('#timeline').innerHTML = CONFIG.timeline.map(i =>

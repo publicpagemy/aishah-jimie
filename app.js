@@ -11,18 +11,21 @@ const bgm = $('#bgm'), musicBtn = $('#musicBtn'), phone = $('#phone');
 let introDone = false;
 
 function runIntro() {
-  requestAnimationFrame(() => owl.classList.add('fly'));
-  setTimeout(() => skip.classList.add('show'), 2500);
-  setTimeout(() => { owl.classList.add('perch'); $('#owl-letter').style.opacity = 0; env.classList.add('drop'); }, 3600);
-  setTimeout(() => { owl.classList.remove('fly'); owl.classList.add('away'); }, 4600);
-  setTimeout(() => cta.classList.add('show'), 4800);
+  setTimeout(() => $('#owlSil').classList.add('go'), 1500);   // distant owl crosses the moon
+  setTimeout(() => owl.classList.add('fly'), 2600);           // snowy owl flies toward the viewer
+  setTimeout(() => skip.classList.add('show'), 3000);
+  setTimeout(() => { $('#owl-letter').style.opacity = 0; env.classList.add('drop'); }, 5300);   // letter tumbles down
+  setTimeout(() => { owl.classList.remove('fly'); owl.classList.add('away'); }, 5350);
+  setTimeout(() => cta.classList.add('show'), 6300);
 }
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;
   if (withMusic) playMusic();
   env.classList.add('open');
-  setTimeout(() => { intro.classList.add('gone'); phone.classList.add('show'); walk(); }, 700);
-  setTimeout(() => intro.remove(), 1800);
+  setTimeout(() => $('#flash').classList.add('go'), 250);
+  setTimeout(() => { phone.classList.add('show'); walk(); }, 450);
+  setTimeout(() => intro.classList.add('gone'), 600);
+  setTimeout(() => intro.remove(), 1500);
 }
 $('#openBtn').addEventListener('click', () => openLetter(true));
 skip.addEventListener('click', () => openLetter(true));
@@ -41,14 +44,24 @@ musicBtn.addEventListener('click', () => {
 
 // ═══════════════ TABS ═══════════════
 const pages = $$('.page'), tabs = $$('#tabbar button');
+let switching = false, current = 'salam';
 function go(id, { scroll = true } = {}) {
-  pages.forEach(p => p.classList.toggle('active', p.id === id));
+  if (id === current || switching) return;
+  switching = true;
+  const from = $('#' + current), to = $('#' + id);
   tabs.forEach(b => b.classList.toggle('active', b.dataset.page === id));
   const t = tabs.find(b => b.dataset.page === id);
   t && t.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-  if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (id === 'ucapan') ensureWishes();
-  walk();
+  walk();                                  // footprints start walking immediately
+  from.classList.add('leaving');
+  setTimeout(() => {                       // then the old page is gone and the new one fades in under the trail
+    from.classList.remove('active', 'leaving');
+    to.classList.add('active');
+    current = id;
+    if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
+    if (id === 'ucapan') ensureWishes();
+    switching = false;
+  }, 420);
 }
 tabs.forEach(b => b.addEventListener('click', () => go(b.dataset.page)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); if (a.id === 'quickCal') $('#gcal').click(); else go(a.dataset.go); }));
@@ -58,16 +71,16 @@ const stepsSvg = $('#footsteps svg');
 const FOOT = 'M0-9c-3.2 0-5 2.6-5 6.2 0 2.4.9 3.9 1.4 5.3H3.6C4.1 1.1 5-.4 5-2.8 5-6.4 3.2-9 0-9zM-3.2 4.2c-.6 1.7-.6 3.2.4 4.3.9 1 2 1 2.8 1s1.9 0 2.8-1c1-1.1 1-2.6.4-4.3z';
 function walk() {
   stepsSvg.innerHTML = '';
-  const W = 430, H = phone.clientHeight || 900;
+  const W = Math.min(window.innerWidth, 430), H = window.innerHeight;
   stepsSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  // random gentle curve from bottom-left-ish to top-right-ish (or mirrored)
+  stepsSvg.setAttribute('preserveAspectRatio', 'none');
   const dir = Math.random() < .5 ? 1 : -1;
   const x0 = dir > 0 ? 40 + Math.random() * 60 : W - 40 - Math.random() * 60;
-  const y0 = H * (.78 + Math.random() * .12);
+  const y0 = H * (.82 + Math.random() * .08);
   const x1 = dir > 0 ? W - 60 - Math.random() * 80 : 60 + Math.random() * 80;
-  const y1 = H * (.12 + Math.random() * .15);
+  const y1 = H * (.10 + Math.random() * .12);
   const cx = W / 2 + (Math.random() - .5) * W * .8, cy = (y0 + y1) / 2 + (Math.random() - .5) * 200;
-  const n = 11;
+  const n = 12, sc = 1.45;
   for (let i = 0; i <= n; i++) {
     const t = i / n, u = 1 - t;
     const x = u * u * x0 + 2 * u * t * cx + t * t * x1;
@@ -78,13 +91,12 @@ function walk() {
     const nx = -dy, ny = dx, len = Math.hypot(nx, ny) || 1;
     const px = x + nx / len * side, py = y + ny / len * side;
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('transform', `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(${i % 2 ? '-1.45 1.45' : '1.45 1.45'})`);
+    g.setAttribute('transform', `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(${i % 2 ? -sc : sc} ${sc})`);
     const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    p.setAttribute('d', FOOT);
-    p.setAttribute('class', 'step');
-    p.style.animationDelay = `${i * 170}ms`;
+    p.setAttribute('d', FOOT); p.setAttribute('class', 'step');
+    p.style.animationDelay = `${i * 95}ms`;
     g.appendChild(p); stepsSvg.appendChild(g);
-    requestAnimationFrame(() => p.classList.add('on'));
+    requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('on')));
   }
 }
 

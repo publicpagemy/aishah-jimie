@@ -15,10 +15,15 @@ QR for hadiah: upload e.g. `assets/qr.png` and set `qrImage: 'assets/qr.png'` in
 ## Change music
 Replace `assets/bgm.mp3`.
 
-## Read RSVP / Ucapan
-Open **https://publicpagemy.github.io/aishah-jimie/admin.html** and sign in with your Google account (ainrazakk@gmail.com).
-Shows totals (hadir / pax / tidak hadir / ucapan), a searchable list, Download CSV, and Padam (delete) per row.
-Raw data also lives in the Firebase console → Firestore → `rsvp` / `ucapan`.
+## Read RSVP / Ucapan (guest submissions)
+1. Go to **https://publicpagemy.github.io/aishah-jimie/admin.html**
+2. Tap **Log masuk dengan Google** → choose **ainrazakk@gmail.com** (the only accounts allowed are ainrazakk@gmail.com and ain@pandai.org — anyone else gets "permission denied").
+3. Top tiles: Hadir (responses), Jumlah pax, Tidak hadir, Ucapan.
+4. **RSVP** tab: name, phone (tap = WhatsApp), hadir/tidak, pax, time. **Ucapan** tab: wishes.
+5. Search box filters by name/phone/text. **Download CSV** exports the current tab (opens in Excel/Numbers). **Padam** deletes a row (asks to confirm).
+
+Raw data: https://console.firebase.google.com/project/aishah-jimie/firestore/data → collections `rsvp` and `ucapan`.
+
 Security rules are in `firestore.rules` (already published). To add another admin, add their email to `isAdmin()` and re-publish.
 
 ## Wording, colours, layout

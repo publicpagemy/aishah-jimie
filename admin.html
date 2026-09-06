@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Aishah & Najimie</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#3b2a1a; --soft:#6b5238; --maroon:#7a1f1f; --gold:#b8925a; --parch:#efe3c8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'IM Fell English', Georgia, serif; color: var(--ink); background: #f3ead6; }
+  header { background: #2f2115; color: #f1e6cf; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  header h1 { font-family: Cinzel, serif; font-size: 16px; letter-spacing: .18em; margin: 0; text-transform: uppercase; }
+  header .who { font-size: 13px; opacity: .8; }
+  main { max-width: 1000px; margin: 0 auto; padding: 18px; }
+  .btn { font: inherit; font-family: Cinzel, serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 9px 14px; border-radius: 4px; border: 1px solid #5c1414; background: var(--maroon); color: #f9efdc; cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--maroon); border-color: var(--gold); }
+  .btn.sm { padding: 5px 9px; font-size: 10px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 16px 0; }
+  .stat { background: var(--maroon); color: #f6e9d2; border-radius: 6px; padding: 12px; text-align: center; }
+  .stat b { display: block; font-family: Cinzel, serif; font-size: 26px; }
+  .stat span { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+  .tabs { display: flex; gap: 6px; margin: 18px 0 10px; }
+  .tabs button { font: inherit; font-family: Cinzel, serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 8px 14px; background: none; border: 1px solid var(--gold); border-radius: 4px; color: var(--soft); cursor: pointer; }
+  .tabs button.on { background: var(--maroon); color: #f6e9d2; border-color: #5c1414; }
+  .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 8px 0 12px; }
+  input[type=search] { font: inherit; padding: 8px 10px; border: 1px solid #b89e6f; border-radius: 4px; background: #fffaf0; min-width: 220px; }
+  .wrap { overflow-x: auto; background: #fffaf0; border: 1px solid rgba(184,146,90,.5); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid rgba(184,146,90,.35); vertical-align: top; }
+  th { font-family: Cinzel, serif; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--maroon); background: #f3ead6; position: sticky; top: 0; }
+  td.msg { white-space: pre-wrap; max-width: 420px; }
+  .yes { color: #2f6b2f; } .no { color: #a33; }
+  .empty { padding: 24px; text-align: center; font-style: italic; color: #9c8468; }
+  #gate { text-align: center; padding: 60px 18px; }
+  #gate p { color: var(--soft); }
+  .hidden { display: none; }
+  .err { color: #a33; font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Aishah &amp; Najimie · Admin</h1>
+  <div><span class="who" id="who"></span> <button class="btn ghost sm hidden" id="signout">Log keluar</button></div>
+</header>
+<main>
+  <section id="gate">
+    <p>Halaman peribadi untuk melihat RSVP dan ucapan.<br><i>Private page — sign in with the Google account that owns the Firebase project.</i></p>
+    <button class="btn" id="signin">Log masuk dengan Google</button>
+    <div class="err" id="gateErr"></div>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="stats">
+      <div class="stat"><b id="sHadir">0</b><span>Hadir · responses</span></div>
+      <div class="stat"><b id="sPax">0</b><span>Jumlah pax</span></div>
+      <div class="stat"><b id="sTidak">0</b><span>Tidak hadir</span></div>
+      <div class="stat"><b id="sWish">0</b><span>Ucapan</span></div>
+    </div>
+    <div class="tabs"><button class="on" data-t="rsvp">RSVP</button><button data-t="ucapan">Ucapan</button></div>
+    <div class="bar">
+      <input type="search" id="q" placeholder="Cari nama / search…">
+      <button class="btn ghost sm" id="csv">Download CSV</button>
+      <span id="count" style="font-size:13px;color:#6b5238"></span>
+    </div>
+    <div class="wrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const C = window.INVITE_CONFIG;
+const app = initializeApp(C.firebase), auth = getAuth(app), db = getFirestore(app);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = d => d ? d.toLocaleString('ms-MY', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+
+let rsvp = [], wishes = [], view = 'rsvp', unsub = [];
+
+$('#signin').onclick = async () => {
+  $('#gateErr').textContent = '';
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch (e) { $('#gateErr').textContent = e.code || e.message; }
+};
+$('#signout').onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  unsub.forEach(u => u()); unsub = [];
+  if (!user) { $('#gate').classList.remove('hidden'); $('#app').classList.add('hidden'); $('#signout').classList.add('hidden'); $('#who').textContent = ''; return; }
+  $('#who').textContent = user.email; $('#signout').classList.remove('hidden');
+  $('#gate').classList.add('hidden'); $('#app').classList.remove('hidden');
+  unsub.push(onSnapshot(query(collection(db, 'rsvp'), orderBy('createdAt', 'desc')), s => {
+    rsvp = s.docs.map(d => ({ id: d.id, ...d.data(), createdAt: d.data().createdAt?.toDate?.() }));
+    render();
+  }, e => { $('#gateErr').textContent = 'RSVP: ' + e.code; $('#gate').classList.remove('hidden'); }));
+  unsub.push(onSnapshot(query(collection(db, 'ucapan'), orderBy('createdAt', 'desc')), s => {
+    wishes = s.docs.map(d => ({ id: d.id, ...d.data(), createdAt: d.data().createdAt?.toDate?.() }));
+    render();
+  }));
+});
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  view = b.dataset.t; document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b)); render();
+});
+$('#q').oninput = render;
+
+function current() {
+  const q = $('#q').value.trim().toLowerCase();
+  const list = view === 'rsvp' ? rsvp : wishes;
+  return q ? list.filter(r => (r.name || '').toLowerCase().includes(q) || (r.phone || '').includes(q) || (r.message || '').toLowerCase().includes(q)) : list;
+}
+
+function render() {
+  const yes = rsvp.filter(r => r.attending === 'yes');
+  $('#sHadir').textContent = yes.length;
+  $('#sPax').textContent = yes.reduce((a, r) => a + (Number(r.pax) || 0), 0);
+  $('#sTidak').textContent = rsvp.filter(r => r.attending === 'no').length;
+  $('#sWish').textContent = wishes.length;
+  const rows = current();
+  $('#count').textContent = `${rows.length} rekod`;
+  const th = $('#tbl thead'), tb = $('#tbl tbody');
+  if (view === 'rsvp') {
+    th.innerHTML = '<tr><th>#</th><th>Nama</th><th>Telefon</th><th>Hadir</th><th>Pax</th><th>Masa</th><th></th></tr>';
+    tb.innerHTML = rows.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.name)}</td><td><a href="https://wa.me/6${esc((r.phone || '').replace(/\D/g, ''))}" target="_blank">${esc(r.phone)}</a></td><td class="${r.attending}">${r.attending === 'yes' ? 'Hadir' : 'Tidak'}</td><td>${r.attending === 'yes' ? esc(r.pax) : '–'}</td><td>${fmt(r.createdAt)}</td><td><button class="btn ghost sm" data-del="rsvp:${r.id}">Padam</button></td></tr>`).join('');
+  } else {
+    th.innerHTML = '<tr><th>#</th><th>Nama</th><th>Ucapan</th><th>Masa</th><th></th></tr>';
+    tb.innerHTML = rows.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.name)}</td><td class="msg">${esc(r.message)}</td><td>${fmt(r.createdAt)}</td><td><button class="btn ghost sm" data-del="ucapan:${r.id}">Padam</button></td></tr>`).join('');
+  }
+  if (!rows.length) tb.innerHTML = '<tr><td colspan="7" class="empty">Tiada rekod · No records yet</td></tr>';
+}
+
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-del]'); if (!b) return;
+  const [col, id] = b.dataset.del.split(':');
+  if (!confirm('Padam rekod ini? / Delete this record?')) return;
+  b.disabled = true;
+  try { await deleteDoc(doc(db, col, id)); } catch (err) { alert(err.code || err.message); b.disabled = false; }
+});
+
+$('#csv').onclick = () => {
+  const rows = current();
+  const head = view === 'rsvp' ? ['Nama', 'Telefon', 'Hadir', 'Pax', 'Masa'] : ['Nama', 'Ucapan', 'Masa'];
+  const body = rows.map(r => view === 'rsvp'
+    ? [r.name, r.phone, r.attending === 'yes' ? 'Hadir' : 'Tidak', r.attending === 'yes' ? r.pax : '', fmt(r.createdAt)]
+    : [r.name, r.message, fmt(r.createdAt)]);
+  const csv = [head, ...body].map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = `${view}-aishah-najimie.csv`; a.click();
+};
+</script>
+</body>
+</html>

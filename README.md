@@ -16,8 +16,10 @@ QR for hadiah: upload e.g. `assets/qr.png` and set `qrImage: 'assets/qr.png'` in
 Replace `assets/bgm.mp3`.
 
 ## Read RSVP / Ucapan
-Firebase console → project **aishah-jimie** → Firestore Database → collections `rsvp` and `ucapan`.
-Security rules are in `firestore.rules` (paste into Firestore → Rules → Publish).
+Open **https://publicpagemy.github.io/aishah-jimie/admin.html** and sign in with your Google account (ainrazakk@gmail.com).
+Shows totals (hadir / pax / tidak hadir / ucapan), a searchable list, Download CSV, and Padam (delete) per row.
+Raw data also lives in the Firebase console → Firestore → `rsvp` / `ucapan`.
+Security rules are in `firestore.rules` (already published). To add another admin, add their email to `isAdmin()` and re-publish.
 
 ## Wording, colours, layout
 `index.html` (text), `styles.css` (look), `app.js` (behaviour).

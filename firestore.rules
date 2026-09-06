@@ -3,20 +3,27 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     function isStr(v, max) { return v is string && v.size() > 0 && v.size() <= max; }
+    // Admin = signed in with Google using one of these accounts (admin.html)
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['ainrazakk@gmail.com', 'ain@pandai.org'];
+    }
 
-    // Guestbook: anyone can read (shown on the page) and create; nobody can edit or delete from the web.
+    // Guestbook: anyone can read (shown on the page) and create; only admin can delete.
     match /ucapan/{id} {
       allow read: if true;
       allow create: if request.resource.data.keys().hasOnly(['name', 'message', 'createdAt'])
         && isStr(request.resource.data.name, 60)
         && isStr(request.resource.data.message, 500)
         && request.resource.data.createdAt == request.time;
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if isAdmin();
     }
 
-    // RSVP: write-only from the web; only the console (you) can read them.
+    // RSVP: guests can only create; admin can read and delete.
     match /rsvp/{id} {
-      allow read: if false;
+      allow read: if isAdmin();
       allow create: if request.resource.data.keys().hasOnly(['name', 'phone', 'attending', 'pax', 'createdAt'])
         && isStr(request.resource.data.name, 80)
         && isStr(request.resource.data.phone, 20)
@@ -24,7 +31,8 @@ service cloud.firestore {
         && request.resource.data.pax is int
         && request.resource.data.pax >= 0 && request.resource.data.pax <= 10
         && request.resource.data.createdAt == request.time;
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if isAdmin();
     }
 
     match /{document=**} { allow read, write: if false; }

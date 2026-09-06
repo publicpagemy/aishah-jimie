@@ -86,12 +86,18 @@ button { font: inherit; cursor: pointer; }
 .tag { font-family: var(--f-head); color: var(--maroon); letter-spacing: .12em; font-size: 14px; }
 
 /* ── Hogwarts-letter header ── */
-.crest { width: 74px; height: 74px; margin: 0 auto 10px; display: block; }
-.letter-head { font-family: var(--f-head); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.7; }
+.letter-head { font-family: var(--f-head); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.7; margin-top: 6px; }
 .letter-head b { display: block; font-size: 17px; color: var(--ink); letter-spacing: .3em; }
 
-/* ── Castle illustration ── */
-.castle { width: 100%; max-width: 340px; margin: 6px auto 0; display: block; color: var(--ink); opacity: .9; }
+/* ── Venue hero (sepia print on parchment) ── */
+.hero { margin: 14px -10px 0; }
+.hero img { width: 100%; display: block; mix-blend-mode: multiply; opacity: .92; }
+
+/* ── Venue photo on Lokasi ── */
+.venue { margin: 18px 0 14px; padding: 8px 8px 10px; background: #fbf6ea; border: 1px solid rgba(184,146,90,.45); box-shadow: 0 8px 22px rgba(40,25,5,.22); transform: rotate(-1.2deg); }
+.venue img { width: 100%; display: block; aspect-ratio: 1000/944; object-fit: cover; }
+.venue figcaption { font-family: var(--f-script); font-size: 20px; color: var(--ink-soft); text-align: center; margin-top: 6px; }
+.map { margin-top: 16px; }
 
 /* ── Countdown ── */
 .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 18px 0 14px; }
@@ -168,13 +174,14 @@ select { appearance: none; -webkit-appearance: none; background-image: url("data
 .contact .acts a { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gold); display: grid; place-items: center; color: var(--maroon); background: rgba(255,250,240,.6); }
 .contact .acts svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 
-/* ── Terima kasih photos ── */
-.photos { position: relative; height: 0; padding-bottom: 132%; margin: 24px 0 10px; }
-.photo { position: absolute; width: 62%; padding: 8px 8px 30px; background: #fbf6ea; box-shadow: 0 10px 24px rgba(40,25,5,.35); border: 1px solid rgba(184,146,90,.4); }
-.photo img { width: 100%; display: block; aspect-ratio: 2/3; object-fit: cover; filter: sepia(.12) contrast(1.02); }
-.photo.a { left: 0; top: 0; transform: rotate(-6deg); z-index: 1; }
-.photo.b { right: 0; top: 70px; transform: rotate(5deg); z-index: 2; }
-.photo::after { content: ""; position: absolute; left: 50%; top: -10px; width: 60px; height: 18px; transform: translateX(-50%) rotate(-2deg); background: rgba(184,146,90,.45); }
+/* ── Couple photo (Pengantin) — natural colour ── */
+.couple { margin: 18px 10px 4px; padding: 8px 8px 10px; background: #fbf6ea; border: 1px solid rgba(184,146,90,.45); box-shadow: 0 10px 24px rgba(40,25,5,.25); transform: rotate(-1.5deg); }
+.couple img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; object-position: 50% 30%; }
+
+/* ── Terima kasih photo — natural colour ── */
+.photo.single { position: relative; margin: 26px 18px 10px; padding: 8px 8px 26px; background: #fbf6ea; box-shadow: 0 12px 28px rgba(40,25,5,.3); border: 1px solid rgba(184,146,90,.4); transform: rotate(2deg); }
+.photo.single img { width: 100%; display: block; aspect-ratio: 2/3; object-fit: cover; }
+.photo.single::after { content: ""; position: absolute; left: 50%; top: -9px; width: 60px; height: 16px; transform: translateX(-50%) rotate(-2deg); background: rgba(184,146,90,.45); }
 
 /* ───────────── Tab bar ───────────── */
 #tabbar {

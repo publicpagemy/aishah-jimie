@@ -39,6 +39,8 @@ Every tab tap: Marauder's-Map footprints walk across the viewport (random curve)
 2. Review the preview in Safari/Chrome **on the Mac** (on iPhone the .html opens in Quick Look and runs no JS — use the live URL instead).
 3. Publish: Claude stages the changed files from the Mac folder, then uses Claude in Chrome on github.com → "Upload files" → Commit. Large (>4 MB) single-file uploads get "You can't perform that action" — upload normal files instead.
 - Chrome is logged into GitHub as `publicpagemy` and Firebase as Google account #2 (`/u/1/` in console URLs).
+- Cache: index.html links `styles.css?v=N` / `app.js?v=N` / `config.js?v=N` — bump N when changing those files so phones don't keep the old copy.
+- Tab bar, music button, footsteps and vignette are direct children of `<body>` (shown via `body.open`), never inside `#phone`.
 - iOS gotcha: never put `transform`/`filter` on `#phone` (breaks fixed tab bar/footsteps) and never put CSS `filter` on the map iframe (renders blank).
 - Never solve TikTok captchas; TikTok/Instagram pages are read via the built-in browser pane, not WebFetch.
 

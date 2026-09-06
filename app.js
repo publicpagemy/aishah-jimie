@@ -23,7 +23,7 @@ function openLetter(withMusic) {
   if (withMusic) playMusic();
   env.classList.add('open');
   setTimeout(() => $('#flash').classList.add('go'), 250);
-  setTimeout(() => { phone.classList.add('show'); walk(); }, 450);
+  setTimeout(() => { document.body.classList.add('open'); phone.classList.add('show'); walk(); }, 450);
   setTimeout(() => intro.classList.add('gone'), 600);
   setTimeout(() => intro.remove(), 1500);
 }
@@ -96,8 +96,9 @@ function walk() {
     p.setAttribute('d', FOOT); p.setAttribute('class', 'step');
     p.style.animationDelay = `${i * 95}ms`;
     g.appendChild(p); stepsSvg.appendChild(g);
-    requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('on')));
   }
+  void stepsSvg.getBoundingClientRect();           // force layout so the opacity animation starts from 0 on every engine
+  stepsSvg.querySelectorAll('.step').forEach(p => p.classList.add('on'));
 }
 
 // ═══════════════ COUNTDOWN + CALENDAR ═══════════════

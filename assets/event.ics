@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//aishah-jimie//invite//MS
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:aishah-jimie-20261115@publicpagemy.github.io
+DTSTAMP:20260906T160000Z
+DTSTART:20261115T030000Z
+DTEND:20261115T080000Z
+SUMMARY:Walimatul Urus Aishah & Muhammad Najimie
+DESCRIPTION:Dengan segala hormatnya menjemput Tuan/Puan ke Majlis Perkahwinan Aishah Binti Abdul Razak & Muhammad Najimie Bin Abdullah. #MieCintaiAishah\nhttps://publicpagemy.github.io/aishah-jimie/
+LOCATION:Rumah Abang Jamil IPOH\, Jalan Raja Dihilir\, Ipoh\, Perak\, Malaysia
+URL:https://publicpagemy.github.io/aishah-jimie/
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Walimatul Urus Aishah & Najimie esok
+END:VALARM
+END:VEVENT
+END:VCALENDAR

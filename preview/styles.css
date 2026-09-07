@@ -189,6 +189,20 @@ select { appearance: none; -webkit-appearance: none; background-image: url("data
 .copy:active { transform: translateY(3px); box-shadow: 0 0 0 #c3a97c, inset 0 1px 0 rgba(255,255,255,.5); }
 .qr { width: 180px; max-width: 70%; margin: 10px auto; display: block; border: 6px solid #fff; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
 
+/* ── Hadiah: wish-list collage (line-art placeholders, no prices) ── */
+.gift-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0 4px; }
+@media (max-width: 359px) { .gift-grid { grid-template-columns: repeat(2, 1fr); } }
+/* same surface language as .card elsewhere on the invitation */
+.gift { margin: 0; padding: 13px 6px 11px; border: 1px solid rgba(184,146,90,.5); border-radius: 8px;
+  background: rgba(255,250,238,.55); box-shadow: 0 6px 18px rgba(80,50,10,.08);
+  display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.gift .gi { display: block; width: 44px; height: 44px; color: var(--ink-soft); }
+.gift .gi svg { width: 100%; height: 100%; display: block; }
+.gift figcaption { font-family: var(--f-head); font-size: 9px; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink); line-height: 1.4; text-align: center; }
+.gift figcaption i { display: block; margin-top: 3px; font-family: var(--f-body); font-style: italic;
+  font-size: 10px; letter-spacing: 0; text-transform: none; color: var(--ink-faint); }
+
 /* ── Hubungi ── */
 .contact { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 4px; border-bottom: 1px dashed var(--parch-edge); }
 .contact:last-child { border-bottom: 0; }

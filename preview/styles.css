@@ -91,10 +91,15 @@ body.open #vignette { opacity: 1; }
 .letter-head b { display: block; font-size: 17px; color: var(--ink); letter-spacing: .3em; }
 
 /* ── Couple monogram (replaces the venue hero on Salam) ── */
-.monogram { margin: 20px 0 4px; text-align: center; }
-.monogram .mg-name { font-family: var(--f-vibes); font-size: clamp(46px, 15vw, 64px); line-height: 1.06;
-  color: var(--maroon); text-shadow: 0 1px 0 rgba(255,252,244,.7), 0 3px 10px rgba(120,70,20,.14); }
-.monogram .mg-amp { font-family: var(--f-head); font-size: 20px; letter-spacing: .06em; color: var(--gold);
+.monogram { position: relative; margin: 22px -14px 6px; padding: 30px 14px 26px; text-align: center; isolation: isolate; }
+/* blurred sepia Rumah Abang Jamil behind the names, faded into the parchment */
+.monogram::before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: -1;
+  background: url("../assets/names-bg.jpg") center / cover no-repeat; }
+.monogram .mg-name { font-family: var(--f-vibes); font-size: clamp(48px, 16vw, 68px); line-height: 1.04;
+  font-weight: 700; color: var(--maroon);
+  text-shadow: 0 1px 0 rgba(255,252,244,.9), 0 2px 4px rgba(255,250,238,.95), 0 5px 16px rgba(120,70,20,.25); }
+.monogram .mg-amp { font-family: var(--f-head); font-size: 20px; font-weight: 700; letter-spacing: .06em; color: #a97c3f;
+  text-shadow: 0 1px 0 rgba(255,252,244,.9);
   margin: 2px 0 0; position: relative; }
 .monogram .mg-amp::before, .monogram .mg-amp::after { content: ""; position: absolute; top: 50%; width: 42px; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold)); }

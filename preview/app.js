@@ -6,7 +6,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ═══════════════ INTRO ═══════════════
-const intro = $('#intro'), env = $('#envelope'), cta = $('#intro .cta'), skip = $('#skipBtn');
+const intro = $('#intro'), env = $('#letter'), cta = $('#intro .cta'), skip = $('#skipBtn');
 const bgm = $('#bgm'), musicBtn = $('#musicBtn'), phone = $('#phone');
 let introDone = false;
 
@@ -58,38 +58,29 @@ function go(id, { scroll = true } = {}) {
     if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
     if (id === 'rsvp') ensureWishes();
     switching = false;
-  }, 600);
+  }, 470);
 }
 tabs.forEach(b => b.addEventListener('click', () => go(b.dataset.page)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); if (a.id === 'quickCal') $('#gcal').click(); else go(a.dataset.go); }));
 
-// ═══════════════ FOOTSTEPS (Marauder's Map) — plain HTML elements, CSS opacity only ═══════════════
-const stepsEl = $('#footsteps');
-function walk() {
-  stepsEl.innerHTML = '';
-  const W = stepsEl.clientWidth || Math.min(window.innerWidth, 430), H = stepsEl.clientHeight || window.innerHeight;
-  const dir = Math.random() < .5 ? 1 : -1;
-  const x0 = dir > 0 ? 40 + Math.random() * 60 : W - 40 - Math.random() * 60;
-  const y0 = H * (.84 + Math.random() * .06);
-  const x1 = dir > 0 ? W - 60 - Math.random() * 80 : 60 + Math.random() * 80;
-  const y1 = H * (.10 + Math.random() * .12);
-  const cx = W / 2 + (Math.random() - .5) * W * .8, cy = (y0 + y1) / 2 + (Math.random() - .5) * 200;
-  const n = 12;
-  for (let i = 0; i <= n; i++) {
-    const t = i / n, u = 1 - t;
-    const x = u * u * x0 + 2 * u * t * cx + t * t * x1;
-    const y = u * u * y0 + 2 * u * t * cy + t * t * y1;
-    const dx = 2 * u * (cx - x0) + 2 * t * (x1 - cx), dy = 2 * u * (cy - y0) + 2 * t * (y1 - cy);
-    const ang = Math.atan2(dy, dx) * 180 / Math.PI + 90;
-    const side = i % 2 ? 10 : -10;
-    const nx = -dy, ny = dx, len = Math.hypot(nx, ny) || 1;
-    const px = x + nx / len * side, py = y + ny / len * side;
-    const d = document.createElement('div');
-    d.className = 'fp';
-    d.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) rotate(${ang.toFixed(1)}deg) scaleX(${i % 2 ? -1 : 1})`;
-    d.style.animationDelay = `${i * 75}ms`;
-    stepsEl.appendChild(d);
+// ═══════════════ PAGE TURN — the card turns like a page of the letter ═══════════════
+const turnEl = $('#pageturn'), sparkEl = $('#pageturn .sparks');
+function walk() {                                   // (kept name: called on every tab change)
+  turnEl.classList.remove('go');
+  sparkEl.innerHTML = '';
+  const H = turnEl.clientHeight || window.innerHeight;
+  for (let i = 0; i < 8; i++) {                     // little hearts lifting off the turning edge
+    const s = document.createElement('div');
+    s.className = 'sp';
+    s.style.left = (30 + Math.random() * 48) + '%';
+    s.style.top = (H * (0.28 + Math.random() * 0.44)) + 'px';
+    s.style.setProperty('--dx', (Math.random() * 46 - 14).toFixed(0) + 'px');
+    s.style.setProperty('--rot', (Math.random() * 60 - 30).toFixed(0) + 'deg');
+    s.style.animationDelay = (60 + i * 60) + 'ms';
+    sparkEl.appendChild(s);
   }
+  void turnEl.offsetWidth;                          // force a reflow so the animation restarts every time
+  turnEl.classList.add('go');
 }
 
 // ═══════════════ COUNTDOWN + CALENDAR ═══════════════

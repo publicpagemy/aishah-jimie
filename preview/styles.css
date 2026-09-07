@@ -212,7 +212,7 @@ select { appearance: none; -webkit-appearance: none; background-image: url("data
 .gift { margin: 0; padding: 13px 6px 11px; border: 1px solid rgba(184,146,90,.5); border-radius: 8px;
   background: rgba(255,250,238,.55); box-shadow: 0 6px 18px rgba(80,50,10,.08);
   display: flex; flex-direction: column; align-items: center; gap: 9px; }
-.gift .gi { display: block; width: 44px; height: 44px; color: var(--ink-soft); }
+.gift .gi { display: block; width: 52px; height: 52px; color: var(--ink-soft); }
 .gift .gi svg { width: 100%; height: 100%; display: block; }
 .gift figcaption { font-family: var(--f-head); font-size: 9px; letter-spacing: .09em; text-transform: uppercase;
   color: var(--ink); line-height: 1.4; text-align: center; }

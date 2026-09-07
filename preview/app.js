@@ -10,14 +10,23 @@ const intro = $('#intro'), env = $('#letter'), cta = $('#intro .cta'), skip = $(
 const bgm = $('#bgm'), musicBtn = $('#musicBtn'), phone = $('#phone');
 let introDone = false;
 
+const bell = $('#bell');
+let bellRang = false;                                  // did the postman's bell actually sound?
+function ringBell(vol = 0.55) {
+  try { bell.currentTime = 0; } catch {}
+  bell.volume = vol;
+  return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
+}
 function runIntro() {
-  setTimeout(() => env.classList.add('drop'), 900);    // the letter flies in from far away
+  setTimeout(() => { env.classList.add('drop'); ringBell(); }, 900);   // letter flies in, kring-kring
   setTimeout(() => skip.classList.add('show'), 1800);
   setTimeout(() => cta.classList.add('show'), 4700);   // lands, then the invitation line appears
 }
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;
-  if (withMusic) playMusic();
+  // iOS blocks audio before the first tap, so if the bell never sounded, ring it now on the tap
+  if (!bellRang) { ringBell(0.45); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
+  else if (withMusic) playMusic();
   env.classList.add('open');
   setTimeout(() => $('#flash').classList.add('go'), 250);
   setTimeout(() => { document.body.classList.add('open'); phone.classList.add('show'); walk(); }, 450);
@@ -38,6 +47,8 @@ function playMusic() {
 musicBtn.addEventListener('click', () => {
   if (bgm.paused) playMusic(); else { bgm.pause(); musicBtn.classList.remove('playing'); }
 });
+// bgm loops forever; the bell is one-shot
+bgm.loop = true;
 
 // ═══════════════ TABS ═══════════════
 const pages = $$('.page'), tabs = $$('#tabbar button');

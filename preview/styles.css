@@ -14,6 +14,7 @@
   --f-head: 'Cinzel', 'Times New Roman', serif;
   --f-body: 'IM Fell English', Georgia, serif;
   --f-script: 'Pinyon Script', 'Brush Script MT', cursive;
+  --f-vibes: 'Great Vibes', 'Pinyon Script', cursive;
   --tab-h: 66px;
   --phone-w: 430px;
 }
@@ -89,9 +90,18 @@ body.open #vignette { opacity: 1; }
 .letter-head { font-family: var(--f-head); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.7; margin-top: 6px; }
 .letter-head b { display: block; font-size: 17px; color: var(--ink); letter-spacing: .3em; }
 
-/* ── Venue hero (sepia print on parchment) ── */
-.hero { margin: 14px -10px 0; }
-.hero img { width: 100%; display: block; opacity: .9; }
+/* ── Couple monogram (replaces the venue hero on Salam) ── */
+.monogram { margin: 20px 0 4px; text-align: center; }
+.monogram .mg-name { font-family: var(--f-vibes); font-size: clamp(46px, 15vw, 64px); line-height: 1.06;
+  color: var(--maroon); text-shadow: 0 1px 0 rgba(255,252,244,.7), 0 3px 10px rgba(120,70,20,.14); }
+.monogram .mg-amp { font-family: var(--f-head); font-size: 20px; letter-spacing: .06em; color: var(--gold);
+  margin: 2px 0 0; position: relative; }
+.monogram .mg-amp::before, .monogram .mg-amp::after { content: ""; position: absolute; top: 50%; width: 42px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold)); }
+.monogram .mg-amp::before { right: calc(50% + 20px); }
+.monogram .mg-amp::after { left: calc(50% + 20px); background: linear-gradient(270deg, transparent, var(--gold)); }
+.monogram .mg-flourish { display: block; width: 120px; height: 12px; margin: 8px auto;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath d='M4 6h34M82 6h34' stroke='%23b8925a' stroke-width='1' fill='none'/%3E%3Cpath d='M60 2.5c-4 0-6 2-6 3.5s2 3.5 6 3.5 6-2 6-3.5-2-3.5-6-3.5z' fill='none' stroke='%23b8925a'/%3E%3Cpath d='M46 6l6-3v6zM74 6l-6-3v6z' fill='%23b8925a'/%3E%3C/svg%3E") center / contain no-repeat; }
 
 /* ── Venue photo on Lokasi ── */
 .venue { margin: 18px 0 14px; padding: 8px 8px 10px; background: #fbf6ea; border: 1px solid rgba(184,146,90,.45); box-shadow: 0 8px 22px rgba(40,25,5,.22); transform: rotate(-1.2deg); }

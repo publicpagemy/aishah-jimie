@@ -87,7 +87,7 @@ body.open #vignette { opacity: 1; }
 .tag { font-family: var(--f-head); color: var(--maroon); letter-spacing: .12em; font-size: 14px; }
 
 /* ── Hogwarts-letter header ── */
-.letter-head { font-family: var(--f-head); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.7; margin-top: 6px; }
+.letter-head { font-family: var(--f-head); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.7; margin-top: 14px; }
 .letter-head b { display: block; font-size: 17px; color: var(--ink); letter-spacing: .3em; }
 
 /* ── Couple monogram (replaces the venue hero on Salam) ── */

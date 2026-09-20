@@ -576,20 +576,45 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .countdown .num { color: #6d1220; font-weight: 600; }
 .countdown .unit { color: #8a2233; opacity: 1; }
 
-/* ── Terima Kasih: photo strip on the left, the words beside it ── */
+
+/* ── every block on a page reads as its own partition ── */
+.part { position: relative; margin: 16px 0; padding: 20px 14px 18px; border-radius: 12px;
+  background: rgba(255,244,226,.055); border: 1px solid rgba(240,221,188,.26);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07); }
+.part:first-child { margin-top: 2px; }
+.part > .sub { margin-top: 0; }
+.part .rule { margin: 16px 0; }
+
+/* ── Terima Kasih: collage left, verse right ── */
 .tk-wrap { display: grid; grid-template-columns: 40% 1fr; gap: 14px; align-items: center;
-  text-align: left; margin: 20px 0 6px; }
+  text-align: center; margin: 18px 0 4px; }
 .tk-strip { position: relative; margin: 0; padding: 6px; border-radius: 3px;
   background: linear-gradient(170deg, #fdf8ee, #efe3cd); border: 1px solid rgba(109,18,32,.3);
   box-shadow: 0 12px 26px rgba(0,0,0,.35); }
 .tk-strip img { display: block; width: 100%; border-radius: 2px; }
-.save-date { position: absolute; right: -30px; bottom: 12px; width: 84px; height: 62px;
-  border-radius: 50%; display: grid; place-items: center; text-align: center; line-height: 1.1;
-  background: linear-gradient(180deg, #74874b, #4b5a2e); color: var(--cream);
-  border: 1px solid rgba(240,221,188,.6); box-shadow: 0 6px 14px rgba(0,0,0,.4);
-  font-family: var(--f-script); font-size: 17px; }
-.tk-words p { font-size: 14.5px; line-height: 1.55; }
-@media (max-width: 340px) { .tk-wrap { grid-template-columns: 1fr; } .save-date { right: 12px; } }
+.poem { font-family: var(--f-body); font-style: italic; font-size: 13.5px; line-height: 1.7;
+  color: var(--cream); }
+.poem span { display: block; }
+.poem span.gap { height: .7em; }
+.poem .by { display: block; margin-top: 14px; font-style: normal; font-family: var(--f-head);
+  font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--champ); }
+.tk-wrap.solo { grid-template-columns: min(190px, 62%); justify-content: center; }
+@media (max-width: 340px) { .tk-wrap { grid-template-columns: 1fr; } }
 
-/* the Salam portrait is cropped closer now */
+/* ── save-the-date ribbon ── */
+.ribbon { position: relative; display: inline-block; margin: 22px auto 4px; padding: 9px 20px;
+  background: linear-gradient(180deg, #74874b, #4b5a2e); color: var(--cream);
+  border: 1px solid rgba(240,221,188,.55);
+  box-shadow: 0 6px 14px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.14);
+  font-family: var(--f-head); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; }
+.ribbon i { display: block; margin-top: 4px; font-family: var(--f-body); font-style: normal;
+  font-size: 12.5px; letter-spacing: .16em; color: var(--champ); }
+.ribbon::before, .ribbon::after { content: ""; position: absolute; top: 6px; bottom: -6px; width: 22px;
+  background: linear-gradient(180deg, #55663a, #35411f); }
+.ribbon::before { left: -20px; -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 40% 50%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 40% 50%); }
+.ribbon::after { right: -20px; -webkit-clip-path: polygon(0 0, 100% 0, 60% 50%, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 60% 50%, 100% 100%, 0 100%); }
+
 .couple-sq img { aspect-ratio: 934/518; }
+#tabbar { grid-template-columns: repeat(3, 1fr); }

@@ -131,6 +131,18 @@ $('#contacts').innerHTML = CONFIG.contacts.map(c => {
 }).join('');
 
 
+const poemEl = $('#poem');
+if (poemEl) {
+  const verse = (CONFIG.poem || '').trim();
+  poemEl.innerHTML = verse
+    ? verse.split('\n').map(l => l.trim()
+        ? `<span>${esc(l.trim())}</span>` : '<span class="gap"></span>').join('')
+      + (CONFIG.poemBy ? `<span class="by">&mdash; ${esc(CONFIG.poemBy)}</span>` : '')
+    : '';
+  // with no verse yet, the collage sits on its own rather than beside an empty column
+  poemEl.closest('.tk-wrap')?.classList.toggle('solo', !verse);
+}
+
 const paxSel = $('#pax');
 paxSel.innerHTML = Array.from({ length: CONFIG.maxPax }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
 $$('input[name=attending]').forEach(r => r.addEventListener('change', () => {

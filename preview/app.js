@@ -12,7 +12,7 @@ let introDone = false;
 
 const bell = $('#bell');
 let bellRang = false;                                  // did the postman's bell actually sound?
-function ringBell(vol = 0.55) {
+function ringBell(vol = 0.22) {
   try { bell.currentTime = 0; } catch {}
   bell.volume = vol;
   return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
@@ -25,7 +25,7 @@ function runIntro() {
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;
   // iOS blocks audio before the first tap, so if the bell never sounded, ring it now on the tap
-  if (!bellRang) { ringBell(0.45); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
+  if (!bellRang) { ringBell(0.2); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
   else if (withMusic) playMusic();
   env.classList.add('open');
   setTimeout(() => $('#flash').classList.add('go'), 250);
@@ -128,19 +128,6 @@ $('#contacts').innerHTML = CONFIG.contacts.map(c => {
   </div></div>`;
 }).join('');
 
-const g = CONFIG.gift, gb = $('#giftBox');
-if (g.accountNo || g.qrImage || g.address) {
-  gb.innerHTML = `
-    ${g.accountNo ? `<div class="card"><h3>${esc(g.bank)}</h3><div class="acct" id="acct">${esc(g.accountNo)}</div><p style="font-size:14px">${esc(g.accountName)}</p>
-      <button class="copy" style="margin-top:10px" id="copyAcct">Salin · Copy</button></div>` : ''}
-    ${g.qrImage ? `<div class="card"><h3>DuitNow QR</h3><img class="qr" src="${esc(g.qrImage)}" alt="QR"></div>` : ''}
-    ${g.address ? `<div class="card"><h3>Hadiah · Gift Delivery</h3><p style="font-size:14.5px;white-space:pre-line">${esc(g.address)}</p></div>` : ''}`;
-  $('#copyAcct')?.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(g.accountNo.replace(/\s/g, '')); $('#copyAcct').textContent = 'Disalin · Copied'; } catch {}
-  });
-} else {
-  gb.innerHTML = `<div class="card"><p class="empty">Butiran akan dikemaskini · Details coming soon</p></div>`;
-}
 
 const paxSel = $('#pax');
 paxSel.innerHTML = Array.from({ length: CONFIG.maxPax }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');

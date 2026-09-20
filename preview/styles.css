@@ -561,3 +561,35 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 #intro .mail-names { color: var(--cream); }
 #intro .skip { background: rgba(246,236,217,.1); border-color: rgba(246,236,217,.4); color: var(--cream); }
 #flash { background: #f7efdd; }
+
+/* ── the opening now sits on the same deep red as the cards ── */
+#intro { background: #360a11; }
+#intro .sky { background:
+  radial-gradient(ellipse at 50% 34%, rgba(186,48,70,.45), transparent 66%),
+  linear-gradient(170deg, #9d1c2c 0%, var(--card) 46%, #45080f 100%); }
+#intro .glow { background: radial-gradient(circle, rgba(246,236,217,.2) 0%, rgba(246,236,217,0) 70%); }
+#intro .vig { box-shadow: inset 0 0 90px 24px rgba(28,3,8,.55), inset 0 0 200px 60px rgba(28,3,8,.32); }
+
+/* ── countdown: dark lettering on the champagne tile ── */
+.countdown .box { background: linear-gradient(180deg, #fbf3e2, var(--champ)); color: #6d1220;
+  box-shadow: 0 3px 0 rgba(92,13,22,.5), 0 6px 14px rgba(0,0,0,.3); }
+.countdown .num { color: #6d1220; font-weight: 600; }
+.countdown .unit { color: #8a2233; opacity: 1; }
+
+/* ── Terima Kasih: photo strip on the left, the words beside it ── */
+.tk-wrap { display: grid; grid-template-columns: 40% 1fr; gap: 14px; align-items: center;
+  text-align: left; margin: 20px 0 6px; }
+.tk-strip { position: relative; margin: 0; padding: 6px; border-radius: 3px;
+  background: linear-gradient(170deg, #fdf8ee, #efe3cd); border: 1px solid rgba(109,18,32,.3);
+  box-shadow: 0 12px 26px rgba(0,0,0,.35); }
+.tk-strip img { display: block; width: 100%; border-radius: 2px; }
+.save-date { position: absolute; right: -30px; bottom: 12px; width: 84px; height: 62px;
+  border-radius: 50%; display: grid; place-items: center; text-align: center; line-height: 1.1;
+  background: linear-gradient(180deg, #74874b, #4b5a2e); color: var(--cream);
+  border: 1px solid rgba(240,221,188,.6); box-shadow: 0 6px 14px rgba(0,0,0,.4);
+  font-family: var(--f-script); font-size: 17px; }
+.tk-words p { font-size: 14.5px; line-height: 1.55; }
+@media (max-width: 340px) { .tk-wrap { grid-template-columns: 1fr; } .save-date { right: 12px; } }
+
+/* the Salam portrait is cropped closer now */
+.couple-sq img { aspect-ratio: 934/518; }

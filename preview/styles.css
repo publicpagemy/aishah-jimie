@@ -86,8 +86,9 @@ body.open #vignette { opacity: 1; }
 .field { margin: 18px 0; }
 .field .lbl { font-family: var(--f-head); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
 .field .lbl i { font-family: var(--f-body); font-style: italic; text-transform: none; letter-spacing: 0; font-size: 13px; }
-.field .val { font-size: 17px; margin-top: 2px; }
+.field .val { font-family: var(--f-head); font-size: 17px; letter-spacing: .04em; margin-top: 3px; }
 
+.doa .amin { display: block; margin-top: 8px; font-style: normal; font-family: var(--f-head); font-size: 13px; letter-spacing: .1em; color: var(--maroon); }
 .doa { font-style: italic; font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; padding: 0 6px; }
 .tag { font-family: var(--f-head); color: var(--maroon); letter-spacing: .12em; font-size: 14px; }
 
@@ -213,10 +214,10 @@ select { appearance: none; -webkit-appearance: none; background-image: url("data
 /* ── Hadiah: wish-list collage (line-art placeholders, no prices) ── */
 
 /* ── Hubungi ── */
-.contact { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 4px; border-bottom: 1px dashed var(--parch-edge); }
+.contact { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 4px; border-bottom: 1px dashed var(--parch-edge); text-align: left; }
 .contact:last-child { border-bottom: 0; }
-.contact .n { font-family: var(--f-head); font-size: 15px; letter-spacing: .08em; }
-.contact .p { font-size: 13px; color: var(--ink-soft); }
+.contact .n { font-family: var(--f-head); font-size: 15px; letter-spacing: .08em; text-align: left; }
+.contact .p { font-size: 14px; color: var(--ink-soft); text-align: left; letter-spacing: .02em; }
 .contact .acts { display: flex; gap: 8px; }
 .contact .acts a { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--parch-edge); display: grid; place-items: center; color: var(--maroon); background: linear-gradient(180deg, #fff7f4, #f7ddd9); box-shadow: 0 3px 0 #c8a3a4, 0 6px 14px rgba(74,38,40,.18), inset 0 1px 0 rgba(255,255,255,.7); transition: transform .12s ease, box-shadow .12s ease; touch-action: manipulation; }
 .contact .acts a:active { transform: translateY(3px); box-shadow: 0 0 0 #c8a3a4, inset 0 1px 0 rgba(255,255,255,.5); }

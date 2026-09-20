@@ -6,7 +6,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ═══════════════ INTRO ═══════════════
-const intro = $('#intro'), env = $('#letter'), cta = $('#intro .cta'), skip = $('#skipBtn');
+const intro = $('#intro'), env = $('#letter'), cta = $('#openBtn'), skip = $('#skipBtn');
 const bgm = $('#bgm'), musicBtn = $('#musicBtn'), phone = $('#phone');
 let introDone = false;
 
@@ -18,9 +18,11 @@ function ringBell(vol = 0.22) {
   return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
 }
 function runIntro() {
-  setTimeout(() => { env.classList.add('drop'); ringBell(); }, 900);   // letter flies in, kring-kring
-  setTimeout(() => skip.classList.add('show'), 1800);
-  setTimeout(() => cta.classList.add('show'), 4700);   // lands, then the invitation line appears
+  setTimeout(() => $('#mailLine').classList.add('show'), 350);
+  setTimeout(() => { env.classList.add('drop'); ringBell(); }, 1000);   // the envelope arrives, kring-kring
+  setTimeout(() => $('#mailNames').classList.add('show'), 1700);
+  setTimeout(() => skip.classList.add('show'), 1900);
+  setTimeout(() => cta.classList.add('show'), 2600);                    // “Buka Surat · Open” appears
 }
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;

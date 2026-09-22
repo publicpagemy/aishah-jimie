@@ -266,6 +266,20 @@ function fitLine(el, force) {
     if (el.scrollWidth >= prev) break;                  // a fixed-size child won't shrink — stop, don't crush the rest
     prev = el.scrollWidth; size -= 0.25; el.style.fontSize = size + 'px';
   }
+  if (el.classList.contains('poem')) levelPoem(el);
+}
+
+// CHANGE 12 — the poem runs level with the collage: first line at the top photo, last line at the bottom one
+function levelPoem(p) {
+  const img = $('.tk-strip img');
+  if (!img || !p.children.length) return;
+  const H = img.getBoundingClientRect().height;
+  if (!H) return;                                      // collage not loaded / page hidden yet
+  p.style.height = 'auto';
+  let size = parseFloat(getComputedStyle(p).fontSize);
+  while (p.scrollHeight > H && size > 9) { size -= 0.25; p.style.fontSize = size + 'px'; }   // too tall → a touch smaller
+  p.style.height = H + 'px';                           // then spread the lines evenly down the strip
+  p.style.marginTop = (img.getBoundingClientRect().top - p.parentElement.getBoundingClientRect().top) + 'px';
 }
 const fitAll = force => $$(FIT_SEL).forEach(el => fitLine(el, force));
 if ('ResizeObserver' in window) {
@@ -277,3 +291,9 @@ if ('ResizeObserver' in window) {
 window.addEventListener('resize', () => fitAll(true));
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitAll(true));
 fitAll(true);
+{ const img = $('.tk-strip img'), poem = $('.poem');
+  if (img && poem) {
+    const relevel = () => fitLine(poem, true);
+    if (!img.complete) img.addEventListener('load', relevel);
+    if ('ResizeObserver' in window) new ResizeObserver(relevel).observe(img);
+  } }

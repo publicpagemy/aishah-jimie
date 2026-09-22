@@ -711,3 +711,8 @@ body { font-size: 17px; }
 /* CHANGE 11 — poem aligned left */
 .poem { text-align: left; }
 /* END CHANGE 11 */
+
+/* CHANGE 12 — poem level with the collage, lines spread evenly beside the photos */
+.tk-wrap { align-items: start; }
+.poem { display: flex; flex-direction: column; justify-content: space-between; line-height: 1.45; }
+/* END CHANGE 12 */

@@ -9,7 +9,7 @@ window.INVITE_CONFIG = {
   // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
   //  TERIMA KASIH POEM — paste it on the empty lines between the two ` marks.
   //  One line of the poem per line. A blank line = a pause between verses.
-  poem: ``Once, the days were wide
+  poem: `Once, the days were wide
 and neither knew
 the shape of the other.
 

@@ -78,7 +78,8 @@ const C = window.INVITE_CONFIG;
 const app = initializeApp(C.firebase), auth = getAuth(app), db = getFirestore(app);
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const fmt = d => d ? d.toLocaleString('ms-MY', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmt = d => { if (!d) return ''; const h = d.getHours(), m = String(d.getMinutes()).padStart(2, '0'); return `${String(d.getDate()).padStart(2, '0')} ${MON[d.getMonth()]}, ${String(h % 12 || 12).padStart(2, '0')}:${m} ${h < 12 ? 'am' : 'pm'}`; };
 
 let rsvp = [], wishes = [], view = 'rsvp', unsub = [];
 

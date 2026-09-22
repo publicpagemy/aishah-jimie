@@ -11,33 +11,32 @@ window.INVITE_CONFIG = {
   //  One line of the poem per line. A blank line = a pause between verses.
   poem: `Once, the days were wide
 and neither knew
-where the other was.
+the shape of the other.
 
-The years turned,
-seasons passed,
+The years passed quietly,
+through long afternoons
+and sudden rain,
 and somewhere between
 one quiet evening
 and the next,
-our paths began
-to soften toward each other.
+our separate roads
+began to bend.
 
-Perhaps love is not
-the thunder of finding,
-but the slow remembrance
-of something
-we did not know
-we had been looking for.
+Perhaps some things arrive
+without thunder,
+only gently,
+like rain beginning
+before we think to notice.
 
 And now,
-with all our tomorrows
-still unwritten,
-we turn toward the years
-the same way we found each other—
+with so much still ahead,
+we stand at the edge
+of unknown,
 
-still becoming,
-still wandering,
-still finding our way
-home to one another.
+not at the end
+of the story,
+but somewhere
+in the middle.
 
 
 `,

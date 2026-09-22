@@ -644,4 +644,62 @@ label .lbl-en { display: block; margin-top: 4px; font-family: var(--f-body); fon
 
 /* lines that must stay on one row: they shrink to fit instead of wrapping */
 .fit { display: block; white-space: nowrap; }
-label .fit { letter-spacing: .07em; }
+
+/* ═════════ readability pass — each block is numbered so it can be undone on its own ═════════ */
+
+/* CHANGE 2 — tighter letter-spacing on the capitals */
+.eyebrow { letter-spacing: .16em; }
+.field .lbl { letter-spacing: .1em; }
+form label { letter-spacing: .08em; }
+label .fit { letter-spacing: .05em; }
+.tag { letter-spacing: .06em; }
+.names { letter-spacing: .03em; }
+.letter-head { letter-spacing: .12em; }
+.letter-head b { letter-spacing: .16em; }
+.btn { letter-spacing: .08em; }
+#intro .btn { letter-spacing: .1em; }
+#intro .mail-line { letter-spacing: .12em; }
+.seg span { letter-spacing: .07em; }
+.card h3 { letter-spacing: .07em; }
+.countdown .unit { letter-spacing: .06em; }
+.wish .who { letter-spacing: .06em; }
+#tabbar button { letter-spacing: .03em; }
+/* END CHANGE 2 */
+
+/* CHANGE 3 — italic only for the short English subtitles; everything else upright */
+.doa, .poem, .wish .when, .empty { font-style: normal; }
+/* END CHANGE 3 */
+
+/* CHANGE 4 — brighter faint text */
+:root { --ink-faint: #c6d6a2; --matcha-deep: #c6d6a2; }
+/* END CHANGE 4 */
+
+/* CHANGE 6 — music button reads as on / off */
+#musicBtn .slash { opacity: 0; transition: opacity .2s; stroke-width: 1.8; }
+#musicBtn:not(.playing) .slash { opacity: 1; }
+#musicBtn:not(.playing) { background: linear-gradient(180deg, #3b4529, #262e1b); color: rgba(216,230,181,.62);
+  border-color: rgba(216,230,181,.3); }
+#musicBtn.playing { box-shadow: 0 0 0 2px var(--matcha), 0 3px 0 #1e2612, 0 7px 16px rgba(0,0,0,.4); }
+/* END CHANGE 6 */
+
+/* CHANGE 7 — tab labels 9 → 11px, always one line (shrinks only if a label overflows) */
+#tabbar .tl { display: block; width: 100%; font-size: 11px; white-space: nowrap; text-align: center; }
+/* END CHANGE 7 */
+
+/* CHANGE 8 — headings and labels → 13px, one line each */
+.eyebrow, .field .lbl, form label[for] { font-size: 13px; white-space: nowrap; }
+.field .lbl i, form label i { font-size: 1.04em; }
+/* END CHANGE 8 */
+
+/* CHANGE 9 — main text → 17px, poem → 15px; single lines stay single */
+body { font-size: 17px; }
+.field .val { white-space: nowrap; }
+.poem { font-size: 15px; }
+.poem span { white-space: nowrap; }
+/* END CHANGE 9 */
+/* CHANGE 9 (cont.) — keep one-line text from stretching its column; it shrinks instead */
+.tk-wrap { grid-template-columns: 40% minmax(0, 1fr); }
+.tk-words { min-width: 0; }
+#tabbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#tabbar button { min-width: 0; }
+/* END CHANGE 9 (cont.) */

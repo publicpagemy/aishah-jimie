@@ -12,7 +12,7 @@ let introDone = false;
 
 const bell = $('#bell');
 let bellRang = false;                                  // did the postman's bell actually sound?
-function ringBell(vol = 0.11) {
+function ringBell(vol = 0.077) {   /* CHANGE 1: was 0.11 */
   try { bell.currentTime = 0; } catch {}
   bell.volume = vol;
   return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
@@ -27,7 +27,7 @@ function runIntro() {
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;
   // iOS blocks audio before the first tap, so if the bell never sounded, ring it now on the tap
-  if (!bellRang) { ringBell(0.1); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
+  if (!bellRang) { ringBell(0.07); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
   else if (withMusic) playMusic();
   env.classList.add('open');
   setTimeout(() => $('#flash').classList.add('go'), 250);
@@ -42,33 +42,17 @@ runIntro();
 // ═══════════════ MUSIC ═══════════════
 function playMusic() {
   bgm.volume = 0; bgm.play().then(() => {
-    musicBtn.classList.add('playing');
+    musicBtn.classList.add('playing'); musicBtn.setAttribute('aria-pressed','true');
     let v = 0; const f = setInterval(() => { v = Math.min(1, v + .05); bgm.volume = v * .7; if (v >= 1) clearInterval(f); }, 80);
   }).catch(() => {});
 }
 musicBtn.addEventListener('click', () => {
-  if (bgm.paused) playMusic(); else { bgm.pause(); musicBtn.classList.remove('playing'); }
+  if (bgm.paused) playMusic(); else { bgm.pause(); musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-pressed','false'); }
 });
 // bgm loops forever; the bell is one-shot
 bgm.loop = true;
 
 
-// ═══════════════ ONE-LINE FIT — shrink a line's type until it sits on a single row ═══════════════
-function fitLine(el) {
-  const box = el.parentElement.clientWidth;
-  if (!box) return;                                  // on a hidden page; the observer calls again when it shows
-  el.style.fontSize = '';
-  let size = parseFloat(getComputedStyle(el).fontSize);
-  while (el.scrollWidth > box && size > 8) { size -= 0.25; el.style.fontSize = size + 'px'; }
-}
-const fits = $$('.fit');
-const fitAll = () => fits.forEach(fitLine);
-if ('ResizeObserver' in window) {
-  const ro = new ResizeObserver(entries => entries.forEach(e => e.target.querySelectorAll('.fit').forEach(fitLine)));
-  new Set(fits.map(f => f.parentElement)).forEach(p => ro.observe(p));
-}
-window.addEventListener('resize', fitAll);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);   // re-measure once the real fonts load
 
 // ═══════════════ TABS ═══════════════
 const pages = $$('.page'), tabs = $$('#tabbar button');
@@ -85,7 +69,7 @@ function go(id, { scroll = true } = {}) {
   setTimeout(() => {                       // then the old page is gone and the new one fades in under the trail
     from.classList.remove('active', 'leaving');
     to.classList.add('active');
-    to.querySelectorAll('.fit').forEach(fitLine);
+    to.querySelectorAll(FIT_SEL).forEach(el => fitLine(el, true));
     current = id;
     if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
     if (id === 'rsvp') ensureWishes();
@@ -156,7 +140,6 @@ if (poemEl) {
   poemEl.innerHTML = verse
     ? verse.split('\n').map(l => l.trim()
         ? `<span>${esc(l.trim())}</span>` : '<span class="gap"></span>').join('')
-      + (CONFIG.poemBy ? `<span class="by">&mdash; ${esc(CONFIG.poemBy)}</span>` : '')
     : '';
   // with no verse yet, the collage sits on its own rather than beside an empty column
   poemEl.closest('.tk-wrap')?.classList.toggle('solo', !verse);
@@ -267,3 +250,30 @@ $('#rsvpForm').addEventListener('submit', async ev => {
     console.error(err); msg.textContent = 'Maaf, gagal menghantar. Sila cuba lagi · Failed to send, please try again.';
   } finally { btn.disabled = false; }
 });
+
+// ═══════════════ ONE-LINE FIT — shrink a line's type until it sits on a single row ═══════════════
+// (CHANGES 7, 8, 9 rely on this — tab labels, headings/labels, main single lines, poem lines)
+const FIT_SEL = '.fit, #tabbar .tl, .eyebrow, .field .lbl, form label[for], .field .val, .poem';   // the poem is fitted as one block so every line shares a size
+const fitW = new WeakMap();
+function fitLine(el, force) {
+  const box = el.clientWidth;
+  if (!box) return;                                     // hidden page — measured again when it shows
+  if (!force && fitW.get(el) === box) return;
+  fitW.set(el, box);
+  el.style.fontSize = '';
+  let size = parseFloat(getComputedStyle(el).fontSize), prev = Infinity;
+  while (el.scrollWidth > box + 0.5 && size > 8) {
+    if (el.scrollWidth >= prev) break;                  // a fixed-size child won't shrink — stop, don't crush the rest
+    prev = el.scrollWidth; size -= 0.25; el.style.fontSize = size + 'px';
+  }
+}
+const fitAll = force => $$(FIT_SEL).forEach(el => fitLine(el, force));
+if ('ResizeObserver' in window) {
+  const byParent = new Map();
+  $$(FIT_SEL).forEach(el => { const p = el.parentElement; byParent.set(p, [...(byParent.get(p) || []), el]); });
+  const ro = new ResizeObserver(es => es.forEach(e => (byParent.get(e.target) || []).forEach(el => fitLine(el))));
+  byParent.forEach((_, p) => ro.observe(p));
+}
+window.addEventListener('resize', () => fitAll(true));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitAll(true));
+fitAll(true);

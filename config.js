@@ -9,7 +9,34 @@ window.INVITE_CONFIG = {
   // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
   //  TERIMA KASIH POEM — paste it on the empty lines between the two ` marks.
   //  One line of the poem per line. A blank line = a pause between verses.
-  poem: `
+  poem: ``Once, the days were wide
+and neither knew
+the shape of the other.
+
+The years passed quietly,
+through long afternoons
+and sudden rain,
+and somewhere between
+one quiet evening
+and the next,
+our separate roads
+began to bend.
+
+Perhaps some things arrive
+without thunder,
+only gently,
+like rain beginning
+before we think to notice.
+
+And now,
+with so much still ahead,
+we stand at the edge
+of the unknown,
+
+not at the end
+of the story,
+but somewhere
+in the middle.
 
 `,
   poemBy: '',          // e.g.  poemBy: 'Michael Faudet',

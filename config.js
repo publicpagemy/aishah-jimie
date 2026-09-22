@@ -5,6 +5,16 @@
 //  Keep the quotes; a comma at the end of each line.
 // ═══════════════════════════════════════════════════════════════════════════
 window.INVITE_CONFIG = {
+
+  // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+  //  TERIMA KASIH POEM — paste it on the empty lines between the two ` marks.
+  //  One line of the poem per line. A blank line = a pause between verses.
+  poem: `
+
+`,
+  poemBy: '',          // e.g.  poemBy: 'Michael Faudet',
+  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
   event: {
     title: 'Walimatul Urus Aishah & Muhammad Najimie',
     start: '2026-11-15T11:00:00+08:00',
@@ -19,15 +29,10 @@ window.INVITE_CONFIG = {
     { t: '4:00 PM',  ms: 'Majlis berakhir', en: 'Reception ends' },
   ],
   contacts: [
+    { name: 'Ain Razak',   phone: '0195593647' },
     { name: 'Afiq Razak',  phone: '0125386947' },
     { name: 'Abdul Razak', phone: '0172229785' },
-    { name: 'Ain',         phone: '0195903647' },
   ],
-  // Gift: fill in and it renders; leave a field as '' to hide it. While all are empty the page shows "Details coming soon".
-  gift: {
-    bank: '', accountName: '', accountNo: '', qrImage: '',
-    address: '',
-  },
   firebase: {
     apiKey: 'AIzaSyCBkP3-F7Yt_iMEbD2eRETnp5-42wZHz9E',
     authDomain: 'aishah-jimie.firebaseapp.com',

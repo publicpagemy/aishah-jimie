@@ -6,21 +6,29 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ═══════════════ INTRO ═══════════════
-const intro = $('#intro'), owl = $('#owl'), env = $('#envelope'), cta = $('#intro .cta'), skip = $('#skipBtn');
+const intro = $('#intro'), env = $('#letter'), cta = $('#openBtn'), skip = $('#skipBtn');
 const bgm = $('#bgm'), musicBtn = $('#musicBtn'), phone = $('#phone');
 let introDone = false;
 
+const bell = $('#bell');
+let bellRang = false;                                  // did the postman's bell actually sound?
+function ringBell(vol = 0.077) {   /* CHANGE 1: was 0.11 */
+  try { bell.currentTime = 0; } catch {}
+  bell.volume = vol;
+  return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
+}
 function runIntro() {
-  setTimeout(() => $('#owlSil').classList.add('go'), 1500);   // distant owl crosses the moon
-  setTimeout(() => owl.classList.add('fly'), 2600);           // snowy owl flies toward the viewer
-  setTimeout(() => skip.classList.add('show'), 3000);
-  setTimeout(() => { $('#owl-letter').style.opacity = 0; env.classList.add('drop'); }, 5300);   // letter tumbles down
-  setTimeout(() => { owl.classList.remove('fly'); owl.classList.add('away'); }, 5350);
-  setTimeout(() => cta.classList.add('show'), 6300);
+  setTimeout(() => $('#mailLine').classList.add('show'), 300);
+  setTimeout(() => { env.classList.add('drop'); ringBell(); }, 700);    // the letter flies in, kring-kring
+  setTimeout(() => $('#mailNames').classList.add('show'), 1300);
+  setTimeout(() => skip.classList.add('show'), 1800);
+  setTimeout(() => cta.classList.add('show'), 4000);                    // after it has landed
 }
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;
-  if (withMusic) playMusic();
+  // iOS blocks audio before the first tap, so if the bell never sounded, ring it now on the tap
+  if (!bellRang) { ringBell(0.07); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
+  else if (withMusic) playMusic();
   env.classList.add('open');
   setTimeout(() => $('#flash').classList.add('go'), 250);
   setTimeout(() => { document.body.classList.add('open'); phone.classList.add('show'); walk(); }, 450);
@@ -34,65 +42,61 @@ runIntro();
 // ═══════════════ MUSIC ═══════════════
 function playMusic() {
   bgm.volume = 0; bgm.play().then(() => {
-    musicBtn.classList.add('playing');
+    musicBtn.classList.add('playing'); musicBtn.setAttribute('aria-pressed','true');
     let v = 0; const f = setInterval(() => { v = Math.min(1, v + .05); bgm.volume = v * .7; if (v >= 1) clearInterval(f); }, 80);
   }).catch(() => {});
 }
 musicBtn.addEventListener('click', () => {
-  if (bgm.paused) playMusic(); else { bgm.pause(); musicBtn.classList.remove('playing'); }
+  if (bgm.paused) playMusic(); else { bgm.pause(); musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-pressed','false'); }
 });
+// bgm loops forever; the bell is one-shot
+bgm.loop = true;
+
+
 
 // ═══════════════ TABS ═══════════════
 const pages = $$('.page'), tabs = $$('#tabbar button');
 let switching = false, current = 'salam';
+const SUB_OF = { aturcara: 'salam', lokasi: 'salam', hubungi: 'salam', ucapan: 'rsvp' };
 function go(id, { scroll = true } = {}) {
+  id = SUB_OF[id] || id;
   if (id === current || switching) return;
   switching = true;
   const from = $('#' + current), to = $('#' + id);
   tabs.forEach(b => b.classList.toggle('active', b.dataset.page === id));
-  const t = tabs.find(b => b.dataset.page === id);
-  t && t.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
   walk();                                  // footprints start walking immediately
   from.classList.add('leaving');
   setTimeout(() => {                       // then the old page is gone and the new one fades in under the trail
     from.classList.remove('active', 'leaving');
     to.classList.add('active');
+    to.querySelectorAll(FIT_SEL).forEach(el => fitLine(el, true));
     current = id;
     if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
-    if (id === 'ucapan') ensureWishes();
+    if (id === 'rsvp') ensureWishes();
     switching = false;
-  }, 600);
+  }, 470);
 }
 tabs.forEach(b => b.addEventListener('click', () => go(b.dataset.page)));
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); if (a.id === 'quickCal') $('#gcal').click(); else go(a.dataset.go); }));
 
-// ═══════════════ FOOTSTEPS (Marauder's Map) — plain HTML elements, CSS opacity only ═══════════════
-const stepsEl = $('#footsteps');
-function walk() {
-  stepsEl.innerHTML = '';
-  const W = stepsEl.clientWidth || Math.min(window.innerWidth, 430), H = stepsEl.clientHeight || window.innerHeight;
-  const dir = Math.random() < .5 ? 1 : -1;
-  const x0 = dir > 0 ? 40 + Math.random() * 60 : W - 40 - Math.random() * 60;
-  const y0 = H * (.84 + Math.random() * .06);
-  const x1 = dir > 0 ? W - 60 - Math.random() * 80 : 60 + Math.random() * 80;
-  const y1 = H * (.10 + Math.random() * .12);
-  const cx = W / 2 + (Math.random() - .5) * W * .8, cy = (y0 + y1) / 2 + (Math.random() - .5) * 200;
-  const n = 12;
-  for (let i = 0; i <= n; i++) {
-    const t = i / n, u = 1 - t;
-    const x = u * u * x0 + 2 * u * t * cx + t * t * x1;
-    const y = u * u * y0 + 2 * u * t * cy + t * t * y1;
-    const dx = 2 * u * (cx - x0) + 2 * t * (x1 - cx), dy = 2 * u * (cy - y0) + 2 * t * (y1 - cy);
-    const ang = Math.atan2(dy, dx) * 180 / Math.PI + 90;
-    const side = i % 2 ? 10 : -10;
-    const nx = -dy, ny = dx, len = Math.hypot(nx, ny) || 1;
-    const px = x + nx / len * side, py = y + ny / len * side;
-    const d = document.createElement('div');
-    d.className = 'fp';
-    d.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) rotate(${ang.toFixed(1)}deg) scaleX(${i % 2 ? -1 : 1})`;
-    d.style.animationDelay = `${i * 75}ms`;
-    stepsEl.appendChild(d);
+// ═══════════════ PAGE TURN — the card turns like a page of the letter ═══════════════
+const turnEl = $('#pageturn'), sparkEl = $('#pageturn .sparks');
+function walk() {                                   // (kept name: called on every tab change)
+  turnEl.classList.remove('go');
+  sparkEl.innerHTML = '';
+  const H = turnEl.clientHeight || window.innerHeight;
+  for (let i = 0; i < 8; i++) {                     // little hearts lifting off the turning edge
+    const s = document.createElement('div');
+    s.className = 'sp';
+    s.style.left = (30 + Math.random() * 48) + '%';
+    s.style.top = (H * (0.28 + Math.random() * 0.44)) + 'px';
+    s.style.setProperty('--dx', (Math.random() * 46 - 14).toFixed(0) + 'px');
+    s.style.setProperty('--rot', (Math.random() * 60 - 30).toFixed(0) + 'deg');
+    s.style.animationDelay = (60 + i * 60) + 'ms';
+    sparkEl.appendChild(s);
   }
+  void turnEl.offsetWidth;                          // force a reflow so the animation restarts every time
+  turnEl.classList.add('go');
 }
 
 // ═══════════════ COUNTDOWN + CALENDAR ═══════════════
@@ -129,18 +133,16 @@ $('#contacts').innerHTML = CONFIG.contacts.map(c => {
   </div></div>`;
 }).join('');
 
-const g = CONFIG.gift, gb = $('#giftBox');
-if (g.accountNo || g.qrImage || g.address) {
-  gb.innerHTML = `
-    ${g.accountNo ? `<div class="card"><h3>${esc(g.bank)}</h3><div class="acct" id="acct">${esc(g.accountNo)}</div><p style="font-size:14px">${esc(g.accountName)}</p>
-      <button class="copy" style="margin-top:10px" id="copyAcct">Salin · Copy</button></div>` : ''}
-    ${g.qrImage ? `<div class="card"><h3>DuitNow QR</h3><img class="qr" src="${esc(g.qrImage)}" alt="QR"></div>` : ''}
-    ${g.address ? `<div class="card"><h3>Hadiah · Gift Delivery</h3><p style="font-size:14.5px;white-space:pre-line">${esc(g.address)}</p></div>` : ''}`;
-  $('#copyAcct')?.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(g.accountNo.replace(/\s/g, '')); $('#copyAcct').textContent = 'Disalin · Copied'; } catch {}
-  });
-} else {
-  gb.innerHTML = `<div class="card"><p class="empty">Butiran akan dikemaskini · Details coming soon</p></div>`;
+
+const poemEl = $('#poem');
+if (poemEl) {
+  const verse = (CONFIG.poem || '').trim();
+  poemEl.innerHTML = verse
+    ? verse.split('\n').map(l => l.trim()
+        ? `<span>${esc(l.trim())}</span>` : '<span class="gap"></span>').join('')
+    : '';
+  // with no verse yet, the collage sits on its own rather than beside an empty column
+  poemEl.closest('.tk-wrap')?.classList.toggle('solo', !verse);
 }
 
 const paxSel = $('#pax');
@@ -248,3 +250,50 @@ $('#rsvpForm').addEventListener('submit', async ev => {
     console.error(err); msg.textContent = 'Maaf, gagal menghantar. Sila cuba lagi · Failed to send, please try again.';
   } finally { btn.disabled = false; }
 });
+
+// ═══════════════ ONE-LINE FIT — shrink a line's type until it sits on a single row ═══════════════
+// (CHANGES 7, 8, 9 rely on this — tab labels, headings/labels, main single lines, poem lines)
+const FIT_SEL = '.fit, #tabbar .tl, .eyebrow, .field .lbl, form label[for], .field .val, .poem';   // the poem is fitted as one block so every line shares a size
+const fitW = new WeakMap();
+function fitLine(el, force) {
+  const box = el.clientWidth;
+  if (!box) return;                                     // hidden page — measured again when it shows
+  if (!force && fitW.get(el) === box) return;
+  fitW.set(el, box);
+  el.style.fontSize = '';
+  let size = parseFloat(getComputedStyle(el).fontSize), prev = Infinity;
+  while (el.scrollWidth > box + 0.5 && size > 8) {
+    if (el.scrollWidth >= prev) break;                  // a fixed-size child won't shrink — stop, don't crush the rest
+    prev = el.scrollWidth; size -= 0.25; el.style.fontSize = size + 'px';
+  }
+  if (el.classList.contains('poem')) levelPoem(el);
+}
+
+// CHANGE 12 — the poem runs level with the collage: first line at the top photo, last line at the bottom one
+function levelPoem(p) {
+  const img = $('.tk-strip img');
+  if (!img || !p.children.length) return;
+  const H = img.getBoundingClientRect().height;
+  if (!H) return;                                      // collage not loaded / page hidden yet
+  p.style.height = 'auto';
+  let size = parseFloat(getComputedStyle(p).fontSize);
+  while (p.scrollHeight > H && size > 9) { size -= 0.25; p.style.fontSize = size + 'px'; }   // too tall → a touch smaller
+  p.style.height = H + 'px';                           // then spread the lines evenly down the strip
+  p.style.marginTop = (img.getBoundingClientRect().top - p.parentElement.getBoundingClientRect().top) + 'px';
+}
+const fitAll = force => $$(FIT_SEL).forEach(el => fitLine(el, force));
+if ('ResizeObserver' in window) {
+  const byParent = new Map();
+  $$(FIT_SEL).forEach(el => { const p = el.parentElement; byParent.set(p, [...(byParent.get(p) || []), el]); });
+  const ro = new ResizeObserver(es => es.forEach(e => (byParent.get(e.target) || []).forEach(el => fitLine(el))));
+  byParent.forEach((_, p) => ro.observe(p));
+}
+window.addEventListener('resize', () => fitAll(true));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitAll(true));
+fitAll(true);
+{ const img = $('.tk-strip img'), poem = $('.poem');
+  if (img && poem) {
+    const relevel = () => fitLine(poem, true);
+    if (!img.complete) img.addEventListener('load', relevel);
+    if ('ResizeObserver' in window) new ResizeObserver(relevel).observe(img);
+  } }

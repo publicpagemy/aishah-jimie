@@ -9,32 +9,39 @@ window.INVITE_CONFIG = {
   // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
   //  TERIMA KASIH POEM — paste it on the empty lines between the two ` marks.
   //  One line of the poem per line. A blank line = a pause between verses.
-  poem: `We joined the dots
-from A to B,
-the line we drew
-from you to me,
-traced empty shores
-across the sea,
-over mountain top,
-past forest tree,
-along the roads
-and walking tracks,
-all bridges burned,
-no looking back,
-for the love
-we have,
-no gate can stop,
-no barking dog
-or bolted lock,
-for what is real
-is meant to be,
-when two hearts
-beat-
-in proximity.
+  poem: `Once, the days were wide
+and neither knew
+where the other was.
+
+The years turned,
+seasons passed,
+and somewhere between
+one quiet evening
+and the next,
+our paths began
+to soften toward each other.
+
+Perhaps love is not
+the thunder of finding,
+but the slow remembrance
+of something
+we did not know
+we had been looking for.
+
+And now,
+with all our tomorrows
+still unwritten,
+we turn toward the years
+the same way we found each other—
+
+still becoming,
+still wandering,
+still finding our way
+home to one another.
 
 
 `,
-  poemBy: 'Michael Faudet',          // e.g.  poemBy: 'Michael Faudet',
+ 
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   event: {

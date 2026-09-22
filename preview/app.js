@@ -12,7 +12,7 @@ let introDone = false;
 
 const bell = $('#bell');
 let bellRang = false;                                  // did the postman's bell actually sound?
-function ringBell(vol = 0.22) {
+function ringBell(vol = 0.11) {
   try { bell.currentTime = 0; } catch {}
   bell.volume = vol;
   return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
@@ -27,7 +27,7 @@ function runIntro() {
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;
   // iOS blocks audio before the first tap, so if the bell never sounded, ring it now on the tap
-  if (!bellRang) { ringBell(0.2); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
+  if (!bellRang) { ringBell(0.1); setTimeout(() => { if (withMusic) playMusic(); }, 620); }
   else if (withMusic) playMusic();
   env.classList.add('open');
   setTimeout(() => $('#flash').classList.add('go'), 250);

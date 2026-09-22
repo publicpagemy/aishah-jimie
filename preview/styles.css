@@ -635,3 +635,9 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 #tabbar button.active { color: var(--matcha-hi); }
 #tabbar button.active::after { background: var(--matcha); }
 .part-rsvp { padding-top: 16px; }
+
+/* RSVP question: Malay on one line, English beneath */
+label .lbl-en { display: block; margin-top: 4px; font-family: var(--f-body); font-style: italic;
+  font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
+.atur-count { margin-top: 18px; padding-top: 16px; border-top: 1px dashed rgba(192,210,154,.35); }
+.atur-count .countdown { margin-top: 0; }

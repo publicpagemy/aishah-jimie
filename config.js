@@ -39,7 +39,7 @@ but somewhere
 in the middle.
 
 `,
-  poemBy: '',          // e.g.  poemBy: 'Michael Faudet',
+  
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   event: {

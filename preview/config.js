@@ -31,7 +31,7 @@ before we think to notice.
 And now,
 with so much still ahead,
 we stand at the edge
-of unknown,
+of the unknown,
 
 not at the end
 of the story,

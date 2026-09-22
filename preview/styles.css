@@ -703,3 +703,11 @@ body { font-size: 17px; }
 #tabbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 #tabbar button { min-width: 0; }
 /* END CHANGE 9 (cont.) */
+
+/* CHANGE 10 — venue name on one line, same size as the address under it */
+.loc-name { font-size: 17px; }
+/* END CHANGE 10 */
+
+/* CHANGE 11 — poem aligned left */
+.poem { text-align: left; }
+/* END CHANGE 11 */

@@ -5,6 +5,16 @@
 //  Keep the quotes; a comma at the end of each line.
 // ═══════════════════════════════════════════════════════════════════════════
 window.INVITE_CONFIG = {
+
+  // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+  //  TERIMA KASIH POEM — paste it on the empty lines between the two ` marks.
+  //  One line of the poem per line. A blank line = a pause between verses.
+  poem: `
+
+`,
+  poemBy: '',          // e.g.  poemBy: 'Michael Faudet',
+  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
   event: {
     title: 'Walimatul Urus Aishah & Muhammad Najimie',
     start: '2026-11-15T11:00:00+08:00',
@@ -12,11 +22,6 @@ window.INVITE_CONFIG = {
     venue: 'Rumah Abang Jamil IPOH, Jalan Raja Dihilir, Ipoh, Perak, Malaysia',
     details: 'Dengan segala hormatnya menjemput Tuan/Puan ke Majlis Perkahwinan Aishah Binti Abdul Razak & Muhammad Najimie Bin Abdullah. #MieCintaiAishah',
   },
-  // Terima Kasih verse. Paste it between the back-ticks, one line per line.
-  // Leave a blank line where you want a pause. poemBy is the credit underneath.
-  poem: ``,
-  poemBy: '',
-
   maxPax: 6,            // largest number selectable in "Jumlah kehadiran"
   // Aturcara — add rows as { t: 'time', ms: 'Bahasa Melayu', en: 'English' }
   timeline: [

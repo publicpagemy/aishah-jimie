@@ -18,11 +18,11 @@ function ringBell(vol = 0.22) {
   return bell.play().then(() => { bellRang = true; }).catch(() => {});   // blocked before a tap on iOS
 }
 function runIntro() {
-  setTimeout(() => $('#mailLine').classList.add('show'), 350);
-  setTimeout(() => { env.classList.add('drop'); ringBell(); }, 1000);   // the envelope arrives, kring-kring
-  setTimeout(() => $('#mailNames').classList.add('show'), 1700);
-  setTimeout(() => skip.classList.add('show'), 1900);
-  setTimeout(() => cta.classList.add('show'), 2600);                    // “Buka Surat · Open” appears
+  setTimeout(() => $('#mailLine').classList.add('show'), 300);
+  setTimeout(() => { env.classList.add('drop'); ringBell(); }, 700);    // the letter flies in, kring-kring
+  setTimeout(() => $('#mailNames').classList.add('show'), 1300);
+  setTimeout(() => skip.classList.add('show'), 1800);
+  setTimeout(() => cta.classList.add('show'), 4000);                    // after it has landed
 }
 function openLetter(withMusic) {
   if (introDone) return; introDone = true;

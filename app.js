@@ -168,26 +168,28 @@ async function initFirebase() {
 }
 const ready = initFirebase();
 
-function fmtWhen(d) {
-  if (!d) return 'baru sahaja';
-  const diff = (Date.now() - d.getTime()) / 6e4;
-  if (diff < 1) return 'baru sahaja';
-  if (diff < 60) return `${Math.floor(diff)} min lalu`;
-  if (diff < 1440) return `${Math.floor(diff / 60)} jam lalu`;
-  return d.toLocaleDateString('ms-MY', { day: 'numeric', month: 'short' });
-}
 function wishNode(w, pending = false) {
   const div = document.createElement('div');
   div.className = 'wish' + (pending ? ' pending' : '');
   div.dataset.id = w.id;
-  div.innerHTML = `<span class="when">${esc(fmtWhen(w.createdAt))}</span><div class="who">${esc(w.name)}</div><div class="msg">${esc(w.message)}</div>
+  div.innerHTML = `<div class="who">${esc(w.name)}</div><div class="msg">${esc(w.message)}</div>
     <svg class="quill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 4c-6 0-11 5-13 12l-3 4 4-3c7-2 12-7 12-13z"/><path d="M8 16l6-6"/></svg>`;
   return div;
+}
+// Guest view shows a random handful of wishes per visit (admin still sees all, with time).
+const WISH_SHOW = 8;
+const wishRank = new Map();          // id -> random key, fixed for this visit so live updates don't reshuffle
+const myWishes = new Set();          // wishes sent from this visit always stay on top
+function pickWishes(list) {
+  list.forEach(w => { if (!wishRank.has(w.id)) wishRank.set(w.id, Math.random()); });
+  const own = list.filter(w => myWishes.has(w.id));
+  const rest = list.filter(w => !myWishes.has(w.id)).sort((a, b) => wishRank.get(a.id) - wishRank.get(b.id));
+  return [...own, ...rest].slice(0, Math.max(WISH_SHOW, own.length));
 }
 function renderWishes(list) {
   wishesEl.innerHTML = '';
   if (!list.length) { wishesEl.innerHTML = '<div class="empty">No wish found? Be the first one to give blessing to this lovely couple!</div>'; return; }
-  list.forEach(w => wishesEl.appendChild(wishNode(w, pendingIds.has(w.id))));
+  pickWishes(list).forEach(w => wishesEl.appendChild(wishNode(w, pendingIds.has(w.id))));
 }
 async function ensureWishes() {
   if (wishesStarted) return; wishesStarted = true;
@@ -200,6 +202,10 @@ async function ensureWishes() {
   }, err => console.warn(err));
 }
 
+// CHANGE 13: live character counter for the wish message
+const wMsgEl = $('#wMsg'), wCountEl = $('#wCount');
+function updCount() { if (!wCountEl) return; const n = wMsgEl.value.length, max = wMsgEl.maxLength; wCountEl.textContent = `${n}/${max}`; wCountEl.classList.toggle('near', n >= max - 20); }
+wMsgEl?.addEventListener('input', updCount);
 $('#wishForm').addEventListener('submit', async ev => {
   ev.preventDefault();
   const f = ev.target, name = f.name.value.trim(), message = f.message.value.trim(), msg = $('#wishMsg');
@@ -209,12 +215,12 @@ $('#wishForm').addEventListener('submit', async ev => {
   const tempId = 'tmp-' + Date.now();
   $('.empty', wishesEl)?.remove();
   wishesEl.prepend(wishNode({ id: tempId, name, message, createdAt: new Date() }, true));
-  f.reset();
+  f.reset(); updCount();
   try {
     await ready;
     if (db) {
       const ref = fs.doc(fs.collection(db, 'ucapan'));
-      pendingIds.add(ref.id);
+      pendingIds.add(ref.id); myWishes.add(ref.id);
       await fs.setDoc(ref, { name, message, createdAt: fs.serverTimestamp() });
       pendingIds.delete(ref.id);
       $(`.wish[data-id="${ref.id}"]`)?.classList.remove('pending');
@@ -228,7 +234,7 @@ $('#wishForm').addEventListener('submit', async ev => {
     console.error(err);
     $(`.wish[data-id="${tempId}"]`)?.remove();
     msg.textContent = 'Maaf, gagal menghantar. Sila cuba lagi · Failed to send, please try again.';
-    f.name.value = name; f.message.value = message;
+    f.name.value = name; f.message.value = message; updCount();
   } finally { btn.disabled = false; }
 });
 

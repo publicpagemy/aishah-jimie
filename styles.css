@@ -716,3 +716,9 @@ body { font-size: 17px; }
 .tk-wrap { align-items: start; }
 .poem { display: flex; flex-direction: column; justify-content: space-between; line-height: 1.45; }
 /* END CHANGE 12 */
+
+/* CHANGE 13: guestbook message character counter */
+.ta-wrap { position: relative; }
+.ta-wrap textarea { padding-bottom: 28px; }
+.ta-count { position: absolute; right: 12px; bottom: 9px; font-size: 12px; font-style: normal; letter-spacing: .02em; color: rgba(74,21,32,.5); pointer-events: none; }
+.ta-count.near { color: rgba(122,31,43,.85); }

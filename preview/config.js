@@ -9,10 +9,32 @@ window.INVITE_CONFIG = {
   // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
   //  TERIMA KASIH POEM — paste it on the empty lines between the two ` marks.
   //  One line of the poem per line. A blank line = a pause between verses.
-  poem: `
+  poem: `We joined the dots
+from A to B,
+the line we drew
+from you to me,
+traced empty shores
+across the sea,
+over mountain top,
+past forest tree,
+along the roads
+and walking tracks,
+all bridges burned,
+no looking back,
+for the love
+we have,
+no gate can stop,
+no barking dog
+or bolted lock,
+for what is real
+is meant to be,
+when two hearts
+beat-
+in proximity.
+
 
 `,
-  poemBy: '',          // e.g.  poemBy: 'Michael Faudet',
+  poemBy: 'Michael Faudet',          // e.g.  poemBy: 'Michael Faudet',
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   event: {

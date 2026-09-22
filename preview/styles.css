@@ -641,3 +641,7 @@ label .lbl-en { display: block; margin-top: 4px; font-family: var(--f-body); fon
   font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
 .atur-count { margin-top: 18px; padding-top: 16px; border-top: 1px dashed rgba(192,210,154,.35); }
 .atur-count .countdown { margin-top: 0; }
+
+/* lines that must stay on one row: they shrink to fit instead of wrapping */
+.fit { display: block; white-space: nowrap; }
+label .fit { letter-spacing: .07em; }

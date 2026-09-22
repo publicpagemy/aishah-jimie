@@ -52,6 +52,24 @@ musicBtn.addEventListener('click', () => {
 // bgm loops forever; the bell is one-shot
 bgm.loop = true;
 
+
+// ═══════════════ ONE-LINE FIT — shrink a line's type until it sits on a single row ═══════════════
+function fitLine(el) {
+  const box = el.parentElement.clientWidth;
+  if (!box) return;                                  // on a hidden page; the observer calls again when it shows
+  el.style.fontSize = '';
+  let size = parseFloat(getComputedStyle(el).fontSize);
+  while (el.scrollWidth > box && size > 8) { size -= 0.25; el.style.fontSize = size + 'px'; }
+}
+const fits = $$('.fit');
+const fitAll = () => fits.forEach(fitLine);
+if ('ResizeObserver' in window) {
+  const ro = new ResizeObserver(entries => entries.forEach(e => e.target.querySelectorAll('.fit').forEach(fitLine)));
+  new Set(fits.map(f => f.parentElement)).forEach(p => ro.observe(p));
+}
+window.addEventListener('resize', fitAll);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);   // re-measure once the real fonts load
+
 // ═══════════════ TABS ═══════════════
 const pages = $$('.page'), tabs = $$('#tabbar button');
 let switching = false, current = 'salam';
@@ -67,6 +85,7 @@ function go(id, { scroll = true } = {}) {
   setTimeout(() => {                       // then the old page is gone and the new one fades in under the trail
     from.classList.remove('active', 'leaving');
     to.classList.add('active');
+    to.querySelectorAll('.fit').forEach(fitLine);
     current = id;
     if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
     if (id === 'rsvp') ensureWishes();

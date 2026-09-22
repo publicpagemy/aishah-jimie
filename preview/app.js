@@ -202,6 +202,10 @@ async function ensureWishes() {
   }, err => console.warn(err));
 }
 
+// CHANGE 13: live character counter for the wish message
+const wMsgEl = $('#wMsg'), wCountEl = $('#wCount');
+function updCount() { if (!wCountEl) return; const n = wMsgEl.value.length, max = wMsgEl.maxLength; wCountEl.textContent = `${n}/${max}`; wCountEl.classList.toggle('near', n >= max - 20); }
+wMsgEl?.addEventListener('input', updCount);
 $('#wishForm').addEventListener('submit', async ev => {
   ev.preventDefault();
   const f = ev.target, name = f.name.value.trim(), message = f.message.value.trim(), msg = $('#wishMsg');
@@ -211,7 +215,7 @@ $('#wishForm').addEventListener('submit', async ev => {
   const tempId = 'tmp-' + Date.now();
   $('.empty', wishesEl)?.remove();
   wishesEl.prepend(wishNode({ id: tempId, name, message, createdAt: new Date() }, true));
-  f.reset();
+  f.reset(); updCount();
   try {
     await ready;
     if (db) {
@@ -230,7 +234,7 @@ $('#wishForm').addEventListener('submit', async ev => {
     console.error(err);
     $(`.wish[data-id="${tempId}"]`)?.remove();
     msg.textContent = 'Maaf, gagal menghantar. Sila cuba lagi · Failed to send, please try again.';
-    f.name.value = name; f.message.value = message;
+    f.name.value = name; f.message.value = message; updCount();
   } finally { btn.disabled = false; }
 });
 

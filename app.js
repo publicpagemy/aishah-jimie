@@ -195,7 +195,7 @@ async function ensureWishes() {
   if (wishesStarted) return; wishesStarted = true;
   await ready;
   if (!db) return;
-  const q = fs.query(fs.collection(db, 'ucapan'), fs.orderBy('createdAt', 'desc'), fs.limit(200));
+  const q = fs.query(fs.collection(db, 'ucapan'), fs.orderBy('createdAt', 'desc'), fs.limit(50));
   fs.onSnapshot(q, snap => {
     const list = snap.docs.map(d => { const x = d.data(); return { id: d.id, name: x.name, message: x.message, createdAt: x.createdAt?.toDate?.() || null }; });
     renderWishes(list);
